@@ -85,7 +85,7 @@ NANONETS_OCR_S = EzDeployConfig(
         library_overrides={
             "transformers": "git+https://github.com/huggingface/transformers@21fac7abba2a37fae86106f87fcf9974fd1e3830",
             "accelerate": "accelerate==0.31.0",
-            "vllm": "vllm==0.6.1",
+            "vllm": "vllm==0.6.2",
         },
     ),
     serving_config=ServingConfig(
