@@ -68,6 +68,32 @@ PHI_3_5_VISION_INSTRUCT_128K_CONFIG = phi_3_5_vision_instruct(
     "128k", None, 110, max_num_images=8
 )
 
+NANONETS_OCR_S = EzDeployConfig(
+    name="nanonets_ocr_s",
+    engine_proc=_ENGINE,
+    engine_config=_ENGINE_CONFIG(
+        model="nanonets/Nanonets-OCR-s",
+        guided_decoding_backend="outlines",
+        vllm_command_flags={
+            "--gpu-memory-utilization": 0.98,
+            "--distributed-executor-backend": "ray",
+        },
+        max_num_images=5,
+        # TODO FIX THIS ON NEW RELEASE OF TRANSFORMERS 0.45.0 otherwise you will get qwen2_vl not found
+        # https://github.com/huggingface/transformers/issues/33401
+        # https://github.com/QwenLM/Qwen2-VL?tab=readme-ov-file#quickstart
+        library_overrides={
+            "transformers": "4.52.1",
+            "accelerate": "accelerate==1.7.0",
+            "vllm": "vllm==0.8.0",
+        },
+    ),
+    serving_config=ServingConfig(
+        # rough estimate for the engines this includes model weights + kv cache + overhead + intermediate states
+        minimum_memory_in_gb=20,
+    ),
+)
+
 QWEN2_VL_2B_INSTRUCT = EzDeployConfig(
     name="qwen2_vl_2b_instruct",
     engine_proc=_ENGINE,
@@ -217,6 +243,9 @@ class VllmVision:
     )
     QWEN2_VL_2B_INSTRUCT: EzDeployConfig = field(
         default_factory=lambda: QWEN2_VL_2B_INSTRUCT
+    )
+    NANONETS_OCR_S: EzDeployConfig = field(
+        default_factory=lambda: NANONETS_OCR_S
     )
     QWEN2_VL_7B_INSTRUCT: EzDeployConfig = field(
         default_factory=lambda: QWEN2_VL_7B_INSTRUCT
