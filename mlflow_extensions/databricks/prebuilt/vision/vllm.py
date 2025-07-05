@@ -83,9 +83,9 @@ NANONETS_OCR_S = EzDeployConfig(
         # https://github.com/huggingface/transformers/issues/33401
         # https://github.com/QwenLM/Qwen2-VL?tab=readme-ov-file#quickstart
         library_overrides={
-            "transformers": "4.52.1",
-            "accelerate": "accelerate==1.7.0",
-            "vllm": "vllm==0.8.0",
+            "transformers": "git+https://github.com/huggingface/transformers@21fac7abba2a37fae86106f87fcf9974fd1e3830",
+            "accelerate": "accelerate==0.31.0",
+            "vllm": "vllm==0.6.1",
         },
     ),
     serving_config=ServingConfig(
